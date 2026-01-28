@@ -36,7 +36,7 @@ kind: Service
 metadata:
   name: mongo-express-service
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: mongo-express
   ports:

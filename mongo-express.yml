@@ -19,17 +19,29 @@ spec:
           ports:
             - containerPort: 8081
           env:
-            - name: ME_CONFIG_MONGODB_ADMINUSERNAME
-              value: root
-            - name: ME_CONFIG_MONGODB_ADMINPASSWORD
-              value: faizal
             - name: ME_CONFIG_MONGODB_SERVER
-              value: mongo
-            - name: ME_CONFIG_BASICAUTH_USERNAME
-              value: root
-            - name: ME_CONFIG_BASICAUTH_PASSWORD
-              # value: root
-              value: pass
+              valueFrom:
+                configMapKeyRef:
+                  name: mongo-config
+                  key: MONGO_DB_HOST
+
+            - name: ME_CONFIG_MONGODB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: mongo-config
+                  key: MONGO_PORT
+
+            - name: ME_CONFIG_MONGODB_ADMINUSERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: MONGO_INITDB_ROOT_USERNAME
+                  
+            - name: ME_CONFIG_MONGODB_ADMINPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: MONGO_INITDB_ROOT_PASSWORD
 ---
 apiVersion: v1
 kind: Service
